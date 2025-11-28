@@ -5,8 +5,23 @@ import openpyxl as pxl
 
 st.title("SUS Score Calculator")
 
-# Chargement du fichier
-uploaded_file = st.file_uploader("Choisir un fichier Excel", type=["xlsx", "xls"], label_visibility="collapsed")
+col1, col2 = st.columns([4, 1])
+
+with col1:
+    # Chargement du fichier
+    uploaded_file = st.file_uploader("Choisir un fichier Excel", type=["xlsx", "xls"], label_visibility="collapsed")
+
+with col2:
+        with open("templates/template_sus.xlsx", "rb") as f:
+            file_bytes = f.read()
+
+        st.download_button(
+            label=":material/download: Template",
+            data=file_bytes,
+            file_name="template_sus.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            width="content"
+        )
 
 if uploaded_file is not None:
 
