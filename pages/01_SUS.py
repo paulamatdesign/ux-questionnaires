@@ -3,6 +3,8 @@ import pandas as pd
 import openpyxl as pxl
 #from plotnine import ggplot, aes, geom_col, labs
 
+if st.button("Home", icon=":material/arrow_back:", type="tertiary"):
+    st.switch_page("Home.py")
 st.title("SUS Score Calculator")
 
 st.write(

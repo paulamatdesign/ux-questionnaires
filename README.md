@@ -16,12 +16,11 @@ The app allows users to upload raw data, automatically compute results, and expl
 - Export results
 - Simple and intuitive UX
 
-## Kind reminder
+## Starter commands
 
-Install dependencies:
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
-
-Run the app:
 streamlit run Home.py
 
 ## Licence

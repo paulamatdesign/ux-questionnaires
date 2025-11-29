@@ -1,6 +1,9 @@
 import streamlit as st
 
-st.set_page_config("UX Questionnaires App", initial_sidebar_state="expanded")
-st.title("UX Questionnaires App")
+st.set_page_config("UX Scores", initial_sidebar_state="collapsed")
+st.title("UX Scores")
 
-st.write("Welcome! Use the left sidebar to navigate.")
+st.write("Welcome! Select a questionnaire to start calculating UX scores.")
+
+if st.button("System Usability Scale (SUS)", icon=":material/arrow_forward:", width="stretch"):
+    st.switch_page("pages/01_SUS.py")
