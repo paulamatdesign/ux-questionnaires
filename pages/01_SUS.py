@@ -5,6 +5,10 @@ import openpyxl as pxl
 
 st.title("SUS Score Calculator")
 
+st.write(
+    "Drop your SUS Excel file here to calculate the score, or download and fill the Template."
+)
+
 col1, col2 = st.columns([4, 1])
 
 with col1:
@@ -40,16 +44,16 @@ if uploaded_file is not None:
             df_processed[col] = 5 - df_processed[col]
 
     # Sum across the 10 items
-    df_processed["User score"] = df_processed.sum(axis=1) * 2.5
-    col = df_processed.pop("User score")   # remove the column
-    df_processed.insert(0, "User score", col)  # reinsert at position 0
+    df_processed["UserScore"] = df_processed.sum(axis=1) * 2.5
+    col = df_processed.pop("UserScore")   # remove the column
+    df_processed.insert(0, "UserScore", col)  # reinsert at position 0
 
-    score = df_processed["User score"].mean()
+    score = df_processed["UserScore"].mean()
 
     tab1, tab2, tab3 = st.tabs(["SUS Score", "Processed Data", "Raw Data"], )
 
     with tab1:
-        st.metric("Score", score, border=True)
+        st.metric("SUS Score", score, border=True)
 
     with tab2:
         st.write(df_processed)
