@@ -48,10 +48,49 @@ if uploaded_file is not None:
     col = df_processed.pop("UserScore")   # remove the column
     df_processed.insert(0, "UserScore", col)  # reinsert at position 0
 
+    def to_grade(s):
+        if s <= 60:
+            return 'F'
+        elif s > 60 and s <= 70:
+            return 'D'
+        elif s > 70 and s <= 80:
+            return 'C'
+        elif s > 80 and s <= 90:
+            return 'B'
+        elif s > 90 and s <= 100:
+            return 'A'
+
+    df_processed['Grades'] = df_processed['UserScore'].apply(to_grade)
+    col = df_processed.pop("Grades")   # remove the column
+    df_processed.insert(0, "Grades", col)  # reinsert at position 0
+
+    def to_acceptability(s):
+        if s <= 50:
+            return 'Not Acceptable'
+        elif s > 50 and s <= 62:
+            return 'Marginal Low'
+        elif s > 62 and s <= 70:
+            return 'Marginal High'
+        elif s > 70 and s <= 100:
+            return 'Acceptable'
+
+    df_processed['Acceptability'] = df_processed['UserScore'].apply(to_acceptability)
+    col = df_processed.pop("Acceptability")   # remove the column
+    df_processed.insert(0, "Acceptability", col)  # reinsert at position 0
+
     score = df_processed["UserScore"].mean()
+    grade = to_grade(score)
+    acceptability = to_acceptability(score)
 
     st.write("### Stats")
-    st.metric("SUS Score", score, border=True)
+
+    col1, col2, col3 = st.columns([3, 3, 6])
+    with col1:
+        st.metric("Score", score, border=True)
+    with col2:
+        st.metric("Grade", grade, border=True)
+    with col3:
+        st.metric("Acceptability", acceptability, border=True)
 
     st.write("### Visuals")
 
