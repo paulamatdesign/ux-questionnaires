@@ -2,6 +2,9 @@ import streamlit as st
 import pandas as pd
 import openpyxl as pxl
 import altair as alt
+import pandas as pd
+import numpy as np
+from scipy import stats
 #from plotnine import ggplot, aes, geom_col, labs
 
 st.set_page_config("SUS", initial_sidebar_state="collapsed")
@@ -76,7 +79,7 @@ if uploaded_file is not None:
     col = df_processed.pop("Acceptability")   # remove the column
     df_processed.insert(0, "Acceptability", col)  # reinsert at position 0
 
-    score = df_processed["UserScore"].mean()
+    score = round(df_processed["UserScore"].mean())
     grade = to_grade(score)
     acceptability = to_acceptability(score)
 
@@ -84,30 +87,66 @@ if uploaded_file is not None:
 
     st.write("##### Stats")
 
-    col1, col2, col3 = st.columns([3, 3, 6])
+    # 1. Extract the SUS scores from the DataFrame
+    scores = df_processed["UserScore"].dropna()
+
+    # 2. Sample size
+    n = len(scores)
+
+    # 3. Sample mean
+    sus_mean = score
+
+    # 4. Sample standard deviation (unbiased, ddof=1)
+    sus_sd = scores.std(ddof=1)
+
+    # 5. Standard error of the mean
+    sus_se = sus_sd / np.sqrt(n)
+
+    # 6. Degrees of freedom
+    dfree = n - 1
+
+    # 7. t critical value for 95% CI (two-tailed)
+    alpha = 0.05
+    t_crit = stats.t.ppf(1 - alpha/2, dfree)
+    
+    # 8. Margin of error
+    margin = t_crit * sus_se
+
+    # 9. Confidence interval bounds
+    ci_low = round(sus_mean - margin)
+    ci_high = round(sus_mean + margin)
+
+    col1, col2 = st.columns(2)
     with col1:
         st.metric("Score", score, border=True)
     with col2:
+        st.metric("CI (95%)", f"{ci_low};{ci_high}", border=True)
+    col1, col2 = st.columns(2)
+    with col1:
         st.metric("Grade", grade, border=True)
-    with col3:
+    with col2:
         st.metric("Acceptability", acceptability, border=True)
 
     st.write("##### Visuals")
 
-    # 2. Create the Altair Bar Chart (your original plot)
     bar_chart = alt.Chart(df_processed).mark_bar().encode(
         alt.X("UserScore:Q").bin(maxbins=20).scale(domain=[0, 100]),
         alt.Y('count()'),
         alt.Color("UserScore:Q").bin(maxbins=20).scale(scheme="darkmulti")
     )
 
-    # 3. Create the Vertical Line for the Mean
     mean_line = alt.Chart(pd.DataFrame({'mean_score': [score]})).mark_rule(color='red', strokeWidth=3).encode(
         x='mean_score:Q',
         tooltip=[alt.Tooltip('mean_score', title=f'Mean Score')]
     )
 
-    # 4. Layer the Bar Chart and the Mean Line
+    # confidence_interval_band = alt.Chart(pd.DataFrame({'ci_lower': [ci_low], 'ci_higher': [ci_high]})).mark_rect(opacity=0.3, color='red').encode(
+    #     x='ci_lower:Q',
+    #     x2='ci_higher:Q', # &lt;--- Corrected this to 'ci_higher:Q'
+    #     y=alt.value(0),
+    #     y2=alt.value(100) # Ensure 10 is indeed the maximum count on your y-axis, or derive it dynamically
+    # )
+
     plot = (bar_chart + mean_line).interactive()
 
     st.altair_chart(plot)
