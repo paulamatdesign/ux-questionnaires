@@ -14,16 +14,16 @@ Principal article: Brooke, John. (1995). SUS: A quick and dirty usability scale.
 
 5-points Likert scales, Strongly disagree to Strongly agree:
 
-- I think that I would like to use this system frequently.
-- I found the system unnecessarily complex.
-- I thought the system was easy to use.
-- I think that I would need the support of a technical person to be able to use this system.
-- I found the various functions in this system were well integrated.
-- I thought there was too much inconsistency in this system.
-- I would imagine that most people would learn to use this system very quickly.
-- I found the system very cumbersome to use.
-- I felt very confident using the system.
-- I needed to learn a lot of things before I could get going with this system.
+- Q1: I think that I would like to use this system frequently.
+- Q2: I found the system unnecessarily complex.
+- Q3: I thought the system was easy to use.
+- Q4: I think that I would need the support of a technical person to be able to use this system.
+- Q5: I found the various functions in this system were well integrated.
+- Q6: I thought there was too much inconsistency in this system.
+- Q7: I would imagine that most people would learn to use this system very quickly.
+- Q8: I found the system very cumbersome to use.
+- Q9: I felt very confident using the system.
+- Q10: I needed to learn a lot of things before I could get going with this system.
 
 ## Themes
 

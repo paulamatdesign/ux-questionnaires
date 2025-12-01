@@ -33,21 +33,31 @@ if uploaded_file is not None:
     # Lecture des données
     df_raw = pd.read_excel(uploaded_file)
 
-    df_processed = df_raw.copy()
+    df = df_raw.copy()
+    to_remove = [col for col in df.columns if not col.startswith("Q")]
+    to_keep = [col for col in df.columns if col.startswith("Q")]
+
+    model = [f"Q{i}" for i in range(1, 11)]
+
+    if to_keep != model:
+        st.error(f"The uploaded file does not conform to the SUS template. Please ensure that the question columns are named exactly as: Q1 to Q10.")
+        st.stop()
+
+    df = df.drop(columns=to_remove)
 
     # Apply SUS scoring rules
-    for i, col in enumerate(df_processed.columns, start=1):
-        if i % 2 == 1:  
+    for col in df.columns:
+        if col in ["Q1", "Q3", "Q5", "Q7", "Q9"]:
             # Odd-numbered items
-            df_processed[col] = df_processed[col] - 1
-        else:           
+            df[col] = df[col] - 1
+        elif col in ["Q2", "Q4", "Q6", "Q8", "Q10"]:
             # Even-numbered items
-            df_processed[col] = 5 - df_processed[col]
+            df[col] = 5 - df[col]
 
     # Sum across the 10 items
-    df_processed["UserScore"] = df_processed.sum(axis=1) * 2.5
-    col = df_processed.pop("UserScore")   # remove the column
-    df_processed.insert(0, "UserScore", col)  # reinsert at position 0
+    df["UserScore"] = df.sum(axis=1) * 2.5
+    col = df.pop("UserScore")   # remove the column
+    df.insert(0, "UserScore", col)  # reinsert at position 0
 
     def as_grade(s):
         if s <= 60:
@@ -61,9 +71,9 @@ if uploaded_file is not None:
         elif s > 90 and s <= 100:
             return 'A'
 
-    df_processed['Grades'] = df_processed['UserScore'].apply(as_grade)
-    col = df_processed.pop("Grades")   # remove the column
-    df_processed.insert(0, "Grades", col)  # reinsert at position 0
+    df['Grades'] = df['UserScore'].apply(as_grade)
+    col = df.pop("Grades")   # remove the column
+    df.insert(0, "Grades", col)  # reinsert at position 0
 
     def as_acceptability(s):
         if s <= 50:
@@ -75,16 +85,16 @@ if uploaded_file is not None:
         else:
             return "ACP"   # Acceptable
 
-    df_processed['Acceptability'] = df_processed['UserScore'].apply(as_acceptability)
-    col = df_processed.pop("Acceptability")   # remove the column
-    df_processed.insert(0, "Acceptability", col)  # reinsert at position 0
+    df['Acceptability'] = df['UserScore'].apply(as_acceptability)
+    col = df.pop("Acceptability")   # remove the column
+    df.insert(0, "Acceptability", col)  # reinsert at position 0
 
-    score = round(df_processed["UserScore"].mean())
+    score = round(df["UserScore"].mean())
     grade = as_grade(score)
     acceptability = as_acceptability(score)
 
     # 1. Extract the SUS scores from the DataFrame
-    scores = df_processed["UserScore"].dropna()
+    scores = df["UserScore"].dropna()
 
     # 2. Sample size
     n = len(scores)
@@ -131,7 +141,7 @@ if uploaded_file is not None:
     with col2:
         st.metric("Score & CI (95%)", f"{score} [{ci_low};{ci_high}]", border=False)
 
-    bar_chart = alt.Chart(df_processed).mark_bar().encode(
+    bar_chart = alt.Chart(df).mark_bar().encode(
         alt.X("UserScore:Q").bin(maxbins=20).scale(domain=[0, 100]),
         alt.Y('count()'),
         alt.Color("UserScore:Q").bin(maxbins=20).scale(scheme="redyellowgreen").legend(None)
@@ -165,7 +175,7 @@ if uploaded_file is not None:
 
     # === 1. Base chart: common encoding ===
     base = (
-        alt.Chart(df_processed)
+        alt.Chart(df)
         .encode(
             x='count()',
             y='Grades:N'
@@ -216,7 +226,7 @@ if uploaded_file is not None:
 
     # === 1. Base chart: common encoding ===
     base = (
-        alt.Chart(df_processed)
+        alt.Chart(df)
         .encode(
             x='count()',
             y='Acceptability:N'
@@ -266,7 +276,7 @@ if uploaded_file is not None:
     if data_type == "Raw":
         st.write(df_raw)
     elif data_type == "Processed":
-        st.write(df_processed)
+        st.write(df)
 
 st.divider()
 
