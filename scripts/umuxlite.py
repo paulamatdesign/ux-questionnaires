@@ -1,12 +1,13 @@
 import numpy as np
 from scipy import stats
 
-class sus:
+class umuxlite:
     def __init__(self, raw):
         self.raw = raw
         self.df = self.processed(raw)
         self.scores = self.df['UserScore']
         self.mean = self.scores.mean()
+        self.sus_predicted = self.df["SUS_Predicted"].mean()
         self.grade = self.as_grade(self.mean)
         self.acceptability = self.as_acceptability(self.mean)
         self.sd = self.scores.std(ddof=1)
@@ -26,34 +27,32 @@ class sus:
         to_remove = [col for col in df.columns if not col.startswith("Q")]
         df = df.drop(columns=to_remove)
 
-        to_keep = [col for col in df.columns if col.startswith("Q")]
-        model = [f"Q{i}" for i in range(1, 11)]
-        if to_keep != model:
-            raise ValueError(f"The uploaded file does not conform to the SUS template. Please ensure that the question columns are named exactly as: Q1 to Q10.")
+        # to_keep = [col for col in df.columns if col.startswith("Q")]
+        # model = [f"Q{i}" for i in range(1, 2)]
+        # if to_keep != model:
+        #     raise ValueError(f"The uploaded file does not conform to the SUS template. Please ensure that the question columns are named exactly as: Q1 to Q2.")
 
         n = len(df)
         if n < 2:
             raise ValueError("The uploaded file must contain responses from at least 2 users.")
 
-        # Apply SUS scoring rules
+        # Apply scoring rules
         for col in df.columns:
-            if col in ["Q1", "Q3", "Q5", "Q7", "Q9"]:
-                # Odd-numbered items
-                df[col] = df[col] - 1
-            elif col in ["Q2", "Q4", "Q6", "Q8", "Q10"]:
-                # Even-numbered items
-                df[col] = 5 - df[col]
+            df[col] = df[col] - 1
 
         # Sum across the 10 items
-        df["UserScore"] = df.sum(axis=1) * 2.5
+        df["UserScore"] = (df.sum(axis=1) / 12) * 100
         col = df.pop("UserScore")   # remove the column
         df.insert(0, "UserScore", col)  # reinsert at position 0
 
-        df['Grades'] = df['UserScore'].apply(self.as_grade)
+        # Predict SUS Score
+        df["SUS_Predicted"] = 0.65 * (df["UserScore"]) + 22.9
+
+        df['Grades'] = df['SUS_Predicted'].apply(self.as_grade)
         col = df.pop("Grades")   # remove the column
         df.insert(0, "Grades", col)  # reinsert at position 0
 
-        df['Acceptability'] = df['UserScore'].apply(self.as_acceptability)
+        df['Acceptability'] = df['SUS_Predicted'].apply(self.as_acceptability)
         col = df.pop("Acceptability")   # remove the column
         df.insert(0, "Acceptability", col)  # reinsert at position 0
 

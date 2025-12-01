@@ -4,23 +4,23 @@ import openpyxl
 import altair as alt
 import pandas as pd
 
-from scripts import sus as sus
+from scripts import umuxlite as uml
 from scripts import utils as ut
 
-st.set_page_config("SUS", initial_sidebar_state="collapsed")
+st.set_page_config("UMUX-Lite", initial_sidebar_state="collapsed")
 
 ut.header()
 
-st.title("SUS Score Calculator")
+st.title("UMUX-Lite Score Calculator")
 
 st.header("1. Downlad and fill the template")
-with open("templates/template-sus.xlsx", "rb") as f:
+with open("templates/template-umux_lite.xlsx", "rb") as f:
         file_bytes = f.read()
 
 st.download_button(
-    label=":material/download: template-sus.xlsx",
+    label=":material/download: template-umux_lite.xlsx",
     data=file_bytes,
-    file_name="template-sus.xlsx",
+    file_name="template-umux_lite.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     width="content"
 )
@@ -33,7 +33,7 @@ if uploaded_file is not None:
     # Lecture des données
     df_raw = pd.read_excel(uploaded_file)
 
-    res = sus.sus(df_raw)
+    res = uml.umuxlite(df_raw)
 
     st.header("Mean Score")
 
@@ -67,7 +67,38 @@ if uploaded_file is not None:
 
         st.altair_chart(plot)
 
-    st.header("Grade")
+    st.header("SUS Predicted Score")
+
+    col1, col2 = st.columns(2)
+    with col1:
+        st.metric("Predicted Mean", round(res.sus_predicted), border=True)
+    with col2:
+        bar_chart = alt.Chart(res.df).mark_bar().encode(
+            alt.X("SUS_Predicted:Q").bin(maxbins=20).scale(domain=[0, 100]),
+            alt.Y('count()'),
+            alt.Color("SUS_Predicted:Q").bin(maxbins=20).scale(scheme="redyellowgreen").legend(None)
+        )
+
+        mean_line = alt.Chart(pd.DataFrame({'mean_score': [res.sus_predicted]})).mark_rule(color='red', size=2, strokeDash=[3, 3]).encode(
+            x='mean_score:Q',
+            tooltip=[alt.Tooltip('mean_score', title=f'Mean Score')]
+        )
+
+        mean_text = (
+            alt.Chart(pd.DataFrame({'mean_score': [res.sus_predicted]}))
+            .mark_text(align='left', dx=8, color="red")
+            .encode(
+                x='mean_score:Q',
+                y=alt.Y(datum=0.5, type="quantitative"),
+                text=alt.value("PREDICTED MEAN")
+            )
+        )
+
+        plot = (bar_chart + mean_line + mean_text).properties(title="Predicted SUS Scores Distribution & Mean")
+
+        st.altair_chart(plot)
+
+    st.header("SUS Predicted Grade")
     col1, col2 = st.columns(2)
     with col1:
         st.metric("Grade", res.grade, border=True)
@@ -117,7 +148,7 @@ if uploaded_file is not None:
 
         st.altair_chart(plot)
 
-    st.header("Acceptability")
+    st.header("SUS Predicted Acceptability")
     col1, col2 = st.columns(2)
     with col1:
         st.metric("Acceptability", res.acceptability, border=True)
@@ -177,9 +208,9 @@ if uploaded_file is not None:
         elif data_type == "Processed":
             st.write(res.df)
 
-with st.expander("About SUS"):
+with st.expander("About UMUX"):
     # Read the markdown file
-    with open("descriptions/sus.md", "r", encoding="utf-8") as f:
+    with open("descriptions/umux.md", "r", encoding="utf-8") as f:
         md_text = f.read()
 
     # Display it in Streamlit
