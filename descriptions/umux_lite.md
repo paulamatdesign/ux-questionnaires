@@ -30,4 +30,8 @@ note: 7-points Likert scales allows to converting to SUS score.
 
 ### SUS Correspondance
 
+7-points Likert scales allows to converting to SUS score:
+
+- SUS Predicted = 0.65 * User Score + 22.9
+
 Lewis, J.R., Utesch, B.S., Maher, D.E. (2015). Investigating the Correspondence Between UMUX-LITE and SUS Scores. In: Marcus, A. (eds) Design, User Experience, and Usability: Design Discourse. Lecture Notes in Computer Science(), vol 9186. Springer, Cham. [https://doi.org/10.1007/978-3-319-20886-2_20](https://doi.org/10.1007/978-3-319-20886-2_20)

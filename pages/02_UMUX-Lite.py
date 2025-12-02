@@ -27,6 +27,7 @@ st.download_button(
 
 st.header("2. Drop your Excel file")
 uploaded_file = st.file_uploader("Choisir un fichier Excel", type=["xlsx", "xls"], label_visibility="collapsed")
+st.info("Only 7-point scales are supported.")
 
 if uploaded_file is not None:
 
@@ -40,7 +41,7 @@ if uploaded_file is not None:
     col1, col2 = st.columns(2)
     with col1:
         st.metric("Mean", round(res.mean), border=True)
-        st.write(f"Mean & CI (95%): {round(res.mean)} [{round(res.ci_low)};{round(res.ci_high)}]")
+        st.write(f"Mean & CI (95%): {round(res.mean)} [{round(res.ci[0])};{round(res.ci[1])}]")
     with col2:
         bar_chart = alt.Chart(res.df).mark_bar().encode(
             alt.X("UserScore:Q").bin(maxbins=20).scale(domain=[0, 100]),
@@ -72,6 +73,7 @@ if uploaded_file is not None:
     col1, col2 = st.columns(2)
     with col1:
         st.metric("Predicted Mean", round(res.sus_predicted), border=True)
+        st.write(f"Predicted Mean & CI (95%): {round(res.sus_predicted)} [{round(res.sus_predicted_ci[0])};{round(res.sus_predicted_ci[1])}]")
     with col2:
         bar_chart = alt.Chart(res.df).mark_bar().encode(
             alt.X("SUS_Predicted:Q").bin(maxbins=20).scale(domain=[0, 100]),
@@ -101,8 +103,8 @@ if uploaded_file is not None:
     st.header("SUS Predicted Grade")
     col1, col2 = st.columns(2)
     with col1:
-        st.metric("Grade", res.grade, border=True)
-        st.write(f"Grade & CI (95%) as Grade: {res.grade} [{res.ci_low_grade};{res.ci_high_grade}]")
+        st.metric("Predicted Grade", res.grade, border=True)
+        st.write(f"Grade & CI (95%) as Grade: {res.grade} [{res.sus_predicted_ci_grade[0]};{res.sus_predicted_ci_grade[1]}]")
     with col2:
         # === 1. Base chart: common encoding ===
         base = (
@@ -139,7 +141,7 @@ if uploaded_file is not None:
             .encode(
                 y=alt.Y(datum=res.grade, type="nominal"),
                 x=alt.Y(datum=0.5, type="quantitative"),
-                text=alt.value("MEAN")
+                text=alt.value("PREDICTED MEAN")
             )
         )
 
@@ -151,8 +153,8 @@ if uploaded_file is not None:
     st.header("SUS Predicted Acceptability")
     col1, col2 = st.columns(2)
     with col1:
-        st.metric("Acceptability", res.acceptability, border=True)
-        st.write(f"Acceptability & CI (95%) as Acceptability: {res.acceptability} [{res.ci_low_acceptability};{res.ci_high_acceptability}]")
+        st.metric("Predicted Acceptability", res.acceptability, border=True)
+        st.write(f"Acceptability & CI (95%) as Acceptability: {res.acceptability} [{res.sus_predicted_ci_acceptability[0]};{res.sus_predicted_ci_acceptability[1]}]")
         st.caption("ACP: Acceptable, MAH: Marginal High, MAL: Marginal Low, NAC: Not Acceptable.")
     with col2:
         # === 1. Base chart: common encoding ===
@@ -190,7 +192,7 @@ if uploaded_file is not None:
             .encode(
                 y=alt.Y(datum=res.acceptability, type="nominal"),
                 x=alt.Y(datum=0.5, type="quantitative"),
-                text=alt.value("MEAN")
+                text=alt.value("PREDICTED MEAN")
             )
         )
 
@@ -210,7 +212,7 @@ if uploaded_file is not None:
 
 with st.expander("About UMUX"):
     # Read the markdown file
-    with open("descriptions/umux.md", "r", encoding="utf-8") as f:
+    with open("descriptions/umux_lite.md", "r", encoding="utf-8") as f:
         md_text = f.read()
 
     # Display it in Streamlit
