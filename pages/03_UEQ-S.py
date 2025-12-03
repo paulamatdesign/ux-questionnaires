@@ -139,4 +139,4 @@ if uploaded_file is not None:
 
         st.altair_chart(plot)
 
-    ut.show_data()
+    ut.show_data(df_raw, res.df)
