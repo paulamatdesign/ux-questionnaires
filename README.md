@@ -1,24 +1,33 @@
 # uxscores
 
-A Streamlit application to compute, visualize, and export key UX questionnaire scores such as **SUS (System Usability Scale)**, **SUS item breakdowns**, and related computed metrics.  
-The app allows users to upload raw data, automatically compute results, and explore them across different views.
+## Purpose
 
-## Features
+This application is an educational project created and developped by [Paul AMAT, UX Designer & Researcher](https://paulamatdesign.github.io/), designed to help students, researchers, and practitioners compute scores from multiple UX questionnaires. It is built with **Python** using **Streamlit**.
 
-- Upload raw questionnaire data (CSV, XLSX)
-- Compute SUS score automatically
-- Display computed scores per participant
-- Mean, distribution and reliability metrics
-- Multipage UI:
-  - SUS Score
-  - Computed Data
-  - Raw Data
-- Export results
-- Simple and intuitive UX
+## Licence Notice
 
-## Starter Commands
+Both the app and its source code are distributed under the **MIT Licence**, allowing anyone to reuse, modify, and adapt them freely.
 
-### Mac
+Please note that while **the app and its code** are MIT-licensed, **the UX questionnaires themselves are not mine**. Each questionnaire (e.g., SUS, UMUX-Lite, UEQ-S) may have its own licence, terms of use, or citation requirements.
+
+Users must check the **original authors’ licences** before employing any questionnaire in a study, publication, or product.
+
+## Permissions From Original Authors
+
+This section lists the explicit permissions obtained directly from the authors of specific questionnaires.  
+
+- UEQ-S: Permission granted by Martin Schrepp by email (December 2, 2025)
+- UMUX-Lite: Permission granted by James Lewis by email (December 3, 2025)
+
+## Data & Privacy Notice
+
+Your data never leaves the application. All inputs are processed locally within the **Streamlit Cloud** hosting environment (formerly Streamlit Sharing). No personal data or uploaded files are stored, logged, or transmitted to any third party. All data remains in memory only for the duration of your session.
+
+---
+
+## GitHub Notice
+
+### Mac Starter Commands
 
 - python3 -m venv .venv
 - source .venv/bin/activate
@@ -27,7 +36,7 @@ The app allows users to upload raw data, automatically compute results, and expl
 - streamlit run Home.py
 - pip freeze > requirements.txt
 
-### Windows
+### Windows Starter Commands
 
 - python3 -m venv .venv
 - .\.venv\Scripts\activate.bat
@@ -36,7 +45,7 @@ The app allows users to upload raw data, automatically compute results, and expl
 - streamlit run Home.py
 - pip freeze > requirements.txt
 
-## Licence
+### Licence
 
 This project is licensed under the MIT License.
 See the LICENSE file for details.

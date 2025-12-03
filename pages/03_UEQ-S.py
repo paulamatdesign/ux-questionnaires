@@ -13,6 +13,13 @@ ut.header()
 
 st.title("UEQ-S Score Calculator")
 
+with st.expander("About UEQ-S"):
+    # Read the markdown file
+    with open("descriptions/ueqs.md", "r", encoding="utf-8") as f:
+        md_text = f.read()
+    # Display it in Streamlit
+    st.markdown(md_text)
+
 st.header("1. Downlad and fill the template")
 with open("templates/template-ueqs.xlsx", "rb") as f:
         file_bytes = f.read()
@@ -27,6 +34,9 @@ st.download_button(
 
 st.header("2. Drop your Excel file")
 uploaded_file = st.file_uploader("Choisir un fichier Excel", type=["xlsx", "xls"], label_visibility="collapsed")
+
+if st.button("Show an exemple", type="tertiary"):
+    uploaded_file = "templates/template-ueqs.xlsx"
 
 if uploaded_file is not None:
 
@@ -72,7 +82,7 @@ if uploaded_file is not None:
     col1, col2 = st.columns(2)
     with col1:
         st.metric("Pragmatic Mean", round(res.mean_pragmatic, 1), border=True)
-        #st.write(f"Predicted Mean & CI (95%): {round(res.sus_predicted)} [{round(res.sus_predicted_ci[0])};{round(res.sus_predicted_ci[1])}]")
+        st.write(f"Predicted Mean & CI (95%): {round(res.mean_pragmatic, 1)} [{round(res.ci_pragmatic[0], 1)};{round(res.ci_pragmatic[1], 1)}]")
     with col2:
         bar_chart = alt.Chart(res.df).mark_bar().encode(
             alt.X("UserScore_Pragmatic:Q").bin(maxbins=20).scale(domain=[-3, 3]),
@@ -104,7 +114,7 @@ if uploaded_file is not None:
     col1, col2 = st.columns(2)
     with col1:
         st.metric("Hedonic Mean", round(res.mean_hedonic, 1), border=True)
-        #st.write(f"Predicted Mean & CI (95%): {round(res.sus_predicted)} [{round(res.sus_predicted_ci[0])};{round(res.sus_predicted_ci[1])}]")
+        st.write(f"Predicted Mean & CI (95%): {round(res.mean_hedonic, 1)} [{round(res.ci_hedonic[0], 1)};{round(res.ci_hedonic[1], 1)}]")
     with col2:
         bar_chart = alt.Chart(res.df).mark_bar().encode(
             alt.X("UserScore_Hedonic:Q").bin(maxbins=20).scale(domain=[-3, 3]),
@@ -139,11 +149,3 @@ if uploaded_file is not None:
             st.write(df_raw)
         elif data_type == "Processed":
             st.write(res.df)
-
-with st.expander("About UEQ-S"):
-    # Read the markdown file
-    with open("descriptions/ueqs.md", "r", encoding="utf-8") as f:
-        md_text = f.read()
-
-    # Display it in Streamlit
-    st.markdown(md_text)

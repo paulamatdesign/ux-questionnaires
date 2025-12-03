@@ -1,5 +1,3 @@
-import numpy as np
-from scipy import stats
 from scripts.utils import *
 
 class umuxlite:

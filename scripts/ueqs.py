@@ -8,6 +8,8 @@ class ueqs:
         self.ci = ci(self.df['UserScore'])
         self.mean_pragmatic = self.df["UserScore_Pragmatic"].mean()
         self.mean_hedonic = self.df["UserScore_Hedonic"].mean()
+        self.ci_pragmatic = ci(self.df["UserScore_Pragmatic"])
+        self.ci_hedonic = ci(self.df["UserScore_Hedonic"])
 
     def processed(self, df):
         to_remove = [col for col in df.columns if not col.startswith("Q")]

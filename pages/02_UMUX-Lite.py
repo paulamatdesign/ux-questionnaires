@@ -13,6 +13,13 @@ ut.header()
 
 st.title("UMUX-Lite Score Calculator")
 
+with st.expander("About UMUX-Lite"):
+    # Read the markdown file
+    with open("descriptions/umux_lite.md", "r", encoding="utf-8") as f:
+        md_text = f.read()
+    # Display it in Streamlit
+    st.markdown(md_text)
+
 st.header("1. Downlad and fill the template")
 with open("templates/template-umux_lite.xlsx", "rb") as f:
         file_bytes = f.read()
@@ -27,7 +34,10 @@ st.download_button(
 
 st.header("2. Drop your Excel file")
 uploaded_file = st.file_uploader("Choisir un fichier Excel", type=["xlsx", "xls"], label_visibility="collapsed")
-st.info("Only 7-point scales are supported.")
+st.caption("Only 7-point scales are supported.")
+
+if st.button("Show an exemple", type="tertiary"):
+    uploaded_file = "templates/template-umux_lite.xlsx"
 
 if uploaded_file is not None:
 
@@ -210,10 +220,3 @@ if uploaded_file is not None:
         elif data_type == "Processed":
             st.write(res.df)
 
-with st.expander("About UMUX"):
-    # Read the markdown file
-    with open("descriptions/umux_lite.md", "r", encoding="utf-8") as f:
-        md_text = f.read()
-
-    # Display it in Streamlit
-    st.markdown(md_text)
