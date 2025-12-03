@@ -180,7 +180,7 @@ if uploaded_file is not None:
     with col1:
         st.metric("Learnability", round(res.learnability), border=True)
         st.write(f"Learnability & CI (95%): {round(res.learnability)} [{round(res.ci_learnability[0])};{round(res.ci_learnability[1])}]")
-        st.caption("No official learnability formula found; using the overall mean method: sum x (100 / (8x4)).")
+        st.caption("No official learnability formula found; using the overall mean method: sum x (100 / (2x4)).")
     with col2:
         bar_chart = alt.Chart(res.df).mark_bar().encode(
             alt.X("Learnability:Q").bin(maxbins=20).scale(domain=[1, 100]),
