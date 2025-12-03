@@ -45,7 +45,7 @@ if uploaded_file is not None:
 
     st.header("Overall")
 
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2, gap="medium")
     with col1:
         st.metric("Mean", round(res.mean, 1), border=True)
         st.write(f"Mean & CI (95%): {round(res.mean, 1)} [{round(res.ci[0], 1)};{round(res.ci[1], 1)}]")
@@ -77,7 +77,7 @@ if uploaded_file is not None:
 
     st.header("Pragmatic Quality")
 
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2, gap="medium")
     with col1:
         st.metric("Pragmatic Mean", round(res.mean_pragmatic, 1), border=True)
         st.write(f"Predicted Mean & CI (95%): {round(res.mean_pragmatic, 1)} [{round(res.ci_pragmatic[0], 1)};{round(res.ci_pragmatic[1], 1)}]")
@@ -109,7 +109,7 @@ if uploaded_file is not None:
 
     st.header("Hedonic Quality")
 
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2, gap="medium")
     with col1:
         st.metric("Hedonic Mean", round(res.mean_hedonic, 1), border=True)
         st.write(f"Predicted Mean & CI (95%): {round(res.mean_hedonic, 1)} [{round(res.ci_hedonic[0], 1)};{round(res.ci_hedonic[1], 1)}]")
@@ -140,4 +140,3 @@ if uploaded_file is not None:
         st.altair_chart(plot)
 
     ut.show_data()
-    

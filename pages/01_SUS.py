@@ -45,7 +45,7 @@ if uploaded_file is not None:
 
     st.header("Mean Score")
 
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2, gap="medium")
     with col1:
         st.metric("Mean", round(res.mean), border=True)
         st.write(f"Mean & CI (95%): {round(res.mean)} [{round(res.ci[0])};{round(res.ci[1])}]")
@@ -76,7 +76,7 @@ if uploaded_file is not None:
         st.altair_chart(plot)
 
     st.header("Grade")
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2, gap="medium")
     with col1:
         st.metric("Grade", res.grade, border=True)
         st.write(f"Grade & CI (95%) as Grade: {res.grade} [{res.ci_grade[0]};{res.ci_grade[1]}]")
@@ -126,7 +126,7 @@ if uploaded_file is not None:
         st.altair_chart(plot)
 
     st.header("Acceptability")
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2, gap="medium")
     with col1:
         st.metric("Acceptability", res.acceptability, border=True)
         st.write(f"Acceptability & CI (95%) as Acceptability: {res.acceptability} [{res.ci_acceptability[0]};{res.ci_acceptability[1]}]")
@@ -176,7 +176,7 @@ if uploaded_file is not None:
         st.altair_chart(plot)
 
     st.header("Learnability")
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2, gap="medium")
     with col1:
         st.metric("Learnability", round(res.learnability), border=True)
         st.write(f"Learnability & CI (95%): {round(res.learnability)} [{round(res.ci_learnability[0])};{round(res.ci_learnability[1])}]")
@@ -208,7 +208,7 @@ if uploaded_file is not None:
         st.altair_chart(plot)
 
     st.header("Usability")
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2, gap="medium")
     with col1:
         st.metric("Usability", round(res.usability), border=True)
         st.write(f"Usability & CI (95%): {round(res.usability)} [{round(res.ci_usability[0])};{round(res.ci_usability[1])}]")

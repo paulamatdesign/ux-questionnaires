@@ -46,7 +46,7 @@ if uploaded_file is not None:
 
     st.header("Mean Score")
 
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2, gap="medium")
     with col1:
         st.metric("Mean", round(res.mean), border=True)
         st.write(f"Mean & CI (95%): {round(res.mean)} [{round(res.ci[0])};{round(res.ci[1])}]")
@@ -78,7 +78,7 @@ if uploaded_file is not None:
 
     st.header("SUS Predicted Score")
 
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2, gap="medium")
     with col1:
         st.metric("Predicted Mean", round(res.sus_predicted), border=True)
         st.write(f"Predicted Mean & CI (95%): {round(res.sus_predicted)} [{round(res.sus_predicted_ci[0])};{round(res.sus_predicted_ci[1])}]")
@@ -109,7 +109,7 @@ if uploaded_file is not None:
         st.altair_chart(plot)
 
     st.header("SUS Predicted Grade")
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2, gap="medium")
     with col1:
         st.metric("Predicted Grade", res.grade, border=True)
         st.write(f"Grade & CI (95%) as Grade: {res.grade} [{res.sus_predicted_ci_grade[0]};{res.sus_predicted_ci_grade[1]}]")
@@ -159,7 +159,7 @@ if uploaded_file is not None:
         st.altair_chart(plot)
 
     st.header("SUS Predicted Acceptability")
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2, gap="medium")
     with col1:
         st.metric("Predicted Acceptability", res.acceptability, border=True)
         st.write(f"Acceptability & CI (95%) as Acceptability: {res.acceptability} [{res.sus_predicted_ci_acceptability[0]};{res.sus_predicted_ci_acceptability[1]}]")
