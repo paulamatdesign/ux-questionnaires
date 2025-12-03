@@ -47,7 +47,7 @@ if uploaded_file is not None:
 
     col1, col2 = st.columns(2)
     with col1:
-        st.metric("Mean", round(res.mean), border=True, help="help text")
+        st.metric("Mean", round(res.mean), border=True)
         st.write(f"Mean & CI (95%): {round(res.mean)} [{round(res.ci[0])};{round(res.ci[1])}]")
     with col2:
         bar_chart = alt.Chart(res.df).mark_bar().encode(

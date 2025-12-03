@@ -163,7 +163,6 @@ if uploaded_file is not None:
     with col1:
         st.metric("Predicted Acceptability", res.acceptability, border=True)
         st.write(f"Acceptability & CI (95%) as Acceptability: {res.acceptability} [{res.sus_predicted_ci_acceptability[0]};{res.sus_predicted_ci_acceptability[1]}]")
-        st.caption("ACP: Acceptable, MAH: Marginal High, MAL: Marginal Low, NAC: Not Acceptable.")
     with col2:
         # === 1. Base chart: common encoding ===
         base = (
@@ -210,4 +209,4 @@ if uploaded_file is not None:
         st.altair_chart(plot)
 
     ut.show_data(df_raw, res.df)
-    
+
