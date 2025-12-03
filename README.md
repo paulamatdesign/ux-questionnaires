@@ -16,8 +16,9 @@ Users must check the **original authors’ licences** before employing any quest
 
 This section lists the explicit permissions obtained directly from the authors of specific questionnaires.  
 
-- UEQ-S: Permission granted by Martin Schrepp by email (December 2, 2025)
-- UMUX-Lite: Permission granted by James Lewis by email (December 3, 2025)
+- UEQ-S: Permission granted by Martin Schrepp by email (December 2, 2025).
+- UMUX-Lite: Permission granted by James Lewis by email (December 3, 2025).
+- SUS: Author is retired.
 
 ## Data & Privacy Notice
 
